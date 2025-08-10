@@ -1,0 +1,58 @@
+name: Tarea de desarrollo
+description: Crear una nueva tarea del trabajo práctico vinculada a un milestone y proyecto
+title: "[Tarea] "
+labels: ["tarea"]
+assignees:
+  - 
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Completa los siguientes campos para registrar esta tarea correctamente.**  
+        Recordá vincular el issue a un *milestone* y al *project board* correspondiente.
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: ¿Qué se busca lograr con esta tarea?
+      placeholder: Crear clase Vehiculo con atributos básicos
+    validations:
+      required: true
+
+  - type: textarea
+    id: detalles
+    attributes:
+      label: Detalles de implementación
+      description: Explicá brevemente los pasos o componentes involucrados.
+      placeholder: |
+        - Crear clase Vehiculo
+        - Agregar constructor con parámetros
+        - Implementar getters y setters
+        - Probar desde clase Main
+    validations:
+      required: true
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Etapa / Milestone
+      description: Seleccioná a qué etapa del trabajo pertenece esta tarea
+      options:
+        - Etapa 1 - Configuración del Proyecto y Entidades JPA
+        - Etapa 2 - Implementación de Repositories y Services
+        - Etapa 3 - Implementación de Controllers y Profiles
+        - Etapa 4 - Docker, Testing y Documentación
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist de finalización
+      description: Marcá los puntos que se deben cumplir para dar la tarea como terminada
+      options:
+        - label: La tarea está implementada correctamente
+        - label: Se probó la funcionalidad en `Main` o test correspondiente
+        - label: Se creó una rama específica para esta tarea
+        - label: Se abrió un Pull Request que menciona este Issue
