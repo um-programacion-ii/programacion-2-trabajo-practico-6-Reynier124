@@ -39,9 +39,9 @@ body:
       label: Etapa / Milestone
       description: Seleccioná a qué etapa del trabajo pertenece esta tarea
       options:
-        - Etapa 1 - Configuración del Proyecto y Entidades JPA
-        - Etapa 2 - Implementación de Repositories y Services
-        - Etapa 3 - Implementación de Controllers y Profiles
+        - Etapa 1 - Configuración y Microservicio de Datos
+        - Etapa 2 - Microservicio de Negocio y Feign
+        - Etapa 3 - Profiles y Configuración de BD
         - Etapa 4 - Docker, Testing y Documentación
     validations:
       required: true
