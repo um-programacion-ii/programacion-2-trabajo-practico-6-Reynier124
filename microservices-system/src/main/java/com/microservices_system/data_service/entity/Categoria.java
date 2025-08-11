@@ -24,4 +24,7 @@ public class Categoria {
     @Column(length = 500)
     private String descripcion;
 
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Producto> productos = new ArrayList<>();
+
 }
