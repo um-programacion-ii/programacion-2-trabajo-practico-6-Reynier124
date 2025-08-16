@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class ProductoBusinessService {
-
     private final DataServiceClient dataServiceClient;
 
     public ProductoBusinessService(DataServiceClient dataServiceClient) {
@@ -62,6 +61,15 @@ public class ProductoBusinessService {
 
         if (request.getStock() < 0) {
             throw new ValidacionNegocioException("El stock no puede ser negativo");
+        }
+    }
+
+    public List<ProductoDTO> obtenerProductosPorCategoria(String categoria) {
+        try {
+            return dataServiceClient.obtenerProductosPorCategoria(categoria);
+        } catch (FeignException e) {
+            log.error("Error al obtener productos del microservicio de datos", e);
+            throw new MicroserviceCommunicationException("Error de comunicación con el servicio de datos");
         }
     }
 }

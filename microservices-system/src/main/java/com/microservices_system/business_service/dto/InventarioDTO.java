@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class InventarioDTO {
     private Long id;
-    private Integer producto;
+    private ProductoDTO producto;
     private Integer cantidad;
     private Integer stockMinimo;
     private LocalDateTime fechaActualizacion;
