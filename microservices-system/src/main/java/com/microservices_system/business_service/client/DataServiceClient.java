@@ -32,6 +32,10 @@ public interface DataServiceClient {
     @GetMapping("/data/categorias")
     List<CategoriaDTO> obtenerTodasLasCategorias();
 
+    @GetMapping("/data/inventario")
+    List<InventarioDTO> obtenerTodosLosInventarios();
+
     @GetMapping("/data/inventario/stock-bajo")
     List<InventarioDTO> obtenerProductosConStockBajo();
+
 }
