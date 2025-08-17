@@ -1,0 +1,218 @@
+# ==================================================================================
+# DOCKER COMPOSE - SISTEMA DE MICROSERVICIOS
+# ==================================================================================
+# 
+# Este archivo define la infraestructura de contenedores para el sistema de 
+# microservicios, incluyendo las bases de datos MySQL y PostgreSQL necesarias
+# para el funcionamiento de la aplicación.
+#
+# Autor: Reynier124
+# Versión: 1.0
+# Fecha: 2025
+#
+# REQUISITOS PREVIOS:
+# - Docker Engine 20.10+
+# - Docker Compose 2.0+
+# - Puertos 3306 y 5432 disponibles en el host
+#
+# COMANDOS ÚTILES:
+# - Iniciar servicios: docker-compose up -d
+# - Ver logs: docker-compose logs -f [servicio]
+# - Detener servicios: docker-compose down
+# - Ver estado: docker-compose ps
+# ==================================================================================
+
+services:
+  # ================================================================================
+  # MYSQL DATABASE SERVICE
+  # ================================================================================
+  # Servicio de base de datos MySQL para almacenamiento principal del sistema
+  # Configurado con usuario específico y base de datos dedicada
+  mysql:
+    # Imagen oficial de MySQL versión 8.4 (LTS)
+    image: mysql:8.4
+    
+    # Nombre del contenedor para fácil identificación
+    container_name: microservices_mysql
+    
+    # Variables de entorno para configuración de MySQL
+    environment:
+      # Contraseña del usuario root de MySQL
+      MYSQL_ROOT_PASSWORD: root_password
+      
+      # Base de datos que se creará automáticamente al iniciar
+      MYSQL_DATABASE: microservices_db
+      
+      # Usuario personalizado para la aplicación (no root)
+      MYSQL_USER: microservices_user
+      
+      # Contraseña del usuario personalizado
+      MYSQL_PASSWORD: microservices_pass
+    
+    # Mapeo de puertos: host:contenedor
+    # Puerto estándar de MySQL (3306) expuesto al host
+    ports:
+      - "3306:3306"
+    
+    # Volumen persistente para datos de MySQL
+    # Los datos sobreviven al reinicio/eliminación del contenedor
+    volumes:
+      - mysql_data:/var/lib/mysql
+    
+    # Red personalizada para comunicación entre servicios
+    networks:
+      - microservices_network
+    
+    # Verificación de salud del servicio
+    # Confirma que MySQL esté listo para recibir conexiones
+    healthcheck:
+      # Comando para verificar conectividad MySQL
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      
+      # Tiempo máximo de espera por respuesta
+      timeout: 20s
+      
+      # Número de intentos antes de marcar como unhealthy
+      retries: 10
+
+  # ================================================================================
+  # POSTGRESQL DATABASE SERVICE  
+  # ================================================================================
+  # Servicio de base de datos PostgreSQL como alternativa/complemento a MySQL
+  # Útil para funcionalidades específicas que requieren características de PostgreSQL
+  postgres:
+    # Imagen oficial de PostgreSQL versión 16 (última estable)
+    image: postgres:16
+    
+    # Nombre del contenedor para fácil identificación
+    container_name: microservices_postgres
+    
+    # Variables de entorno para configuración de PostgreSQL
+    environment:
+      # Base de datos que se creará automáticamente
+      POSTGRES_DB: microservices_db
+      
+      # Usuario para la aplicación
+      POSTGRES_USER: microservices_user
+      
+      # Contraseña del usuario
+      POSTGRES_PASSWORD: microservices_pass
+    
+    # Mapeo de puertos: host:contenedor
+    # Puerto estándar de PostgreSQL (5432) expuesto al host
+    ports:
+      - "5432:5432"
+    
+    # Volumen persistente para datos de PostgreSQL
+    # Mantiene los datos entre reinicios del contenedor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    # Red personalizada para comunicación inter-servicios
+    networks:
+      - microservices_network
+    
+    # Verificación de salud del servicio PostgreSQL
+    # Asegura que la base de datos esté lista para conexiones
+    healthcheck:
+      # Comando pg_isready específico para PostgreSQL
+      test: ["CMD-SHELL", "pg_isready -U microservices_user -d microservices_db"]
+      
+      # Tiempo límite para cada verificación
+      timeout: 20s
+      
+      # Intentos de verificación antes de fallar
+      retries: 10
+
+# ==================================================================================
+# VOLÚMENES PERSISTENTES
+# ==================================================================================
+# Definición de volúmenes Docker para persistencia de datos
+# Los datos se mantienen incluso si los contenedores son eliminados
+volumes:
+  # Volumen para almacenar datos de MySQL
+  # Ubicación: /var/lib/docker/volumes/mysql_data
+  mysql_data:
+  # Configuración por defecto (local driver)
+  # Los datos se almacenan en el host Docker
+  
+  # Volumen para almacenar datos de PostgreSQL  
+  # Ubicación: /var/lib/docker/volumes/postgres_data
+  postgres_data:
+  # Configuración por defecto (local driver)
+  # Persistencia garantizada entre reinicios
+
+# ==================================================================================
+# REDES DE CONTENEDORES
+# ==================================================================================
+# Configuración de red personalizada para comunicación entre servicios
+networks:
+  # Red bridge personalizada para el sistema de microservicios
+  microservices_network:
+    # Driver bridge: permite comunicación entre contenedores
+    # Los contenedores pueden comunicarse usando nombres de servicio
+    driver: bridge
+    
+    # CARACTERÍSTICAS DE LA RED:
+    # - Aislamiento: Solo contenedores en esta red pueden comunicarse
+    # - DNS interno: Resolución automática de nombres de servicio
+    # - Comunicación: mysql:3306, postgres:5432 desde otros contenedores
+    # - Seguridad: Tráfico aislado del host y otras redes Docker
+
+# ==================================================================================
+# NOTAS DE CONFIGURACIÓN Y USO
+# ==================================================================================
+#
+# CONEXIONES DESDE LA APLICACIÓN:
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ MySQL:                                                                       │
+# │   Host: mysql (desde contenedores) | localhost (desde host)                 │
+# │   Puerto: 3306                                                               │
+# │   Database: microservices_db                                                 │
+# │   Usuario: microservices_user                                                │
+# │   Contraseña: microservices_pass                                             │
+# │                                                                              │
+# │ PostgreSQL:                                                                  │
+# │   Host: postgres (desde contenedores) | localhost (desde host)              │
+# │   Puerto: 5432                                                               │
+# │   Database: microservices_db                                                 │
+# │   Usuario: microservices_user                                                │
+# │   Contraseña: microservices_pass                                             │
+# └──────────────────────────────────────────────────────────────────────────────┘
+#
+# COMANDOS DE ADMINISTRACIÓN:
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ # Iniciar todos los servicios en segundo plano                              │
+# │ docker-compose up -d                                                         │
+# │                                                                              │
+# │ # Ver logs en tiempo real                                                    │
+# │ docker-compose logs -f mysql                                                 │
+# │ docker-compose logs -f postgres                                              │
+# │                                                                              │
+# │ # Verificar estado de servicios                                              │
+# │ docker-compose ps                                                            │
+# │                                                                              │
+# │ # Detener y eliminar contenedores (datos se conservan)                      │
+# │ docker-compose down                                                          │
+# │                                                                              │
+# │ # Eliminar todo incluyendo volúmenes (¡CUIDADO: borra datos!)               │
+# │ docker-compose down -v                                                       │
+# │                                                                              │
+# │ # Reconstruir servicios                                                      │
+# │ docker-compose up -d --force-recreate                                        │
+# └──────────────────────────────────────────────────────────────────────────────┘
+#
+# TROUBLESHOOTING:
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Error "port already in use":                                                 │
+# │   - Verificar que puertos 3306/5432 estén libres                            │
+# │   - Detener servicios MySQL/PostgreSQL del sistema                          │
+# │                                                                              │
+# │ Problemas de conectividad:                                                   │
+# │   - Esperar a que healthcheck sea exitoso                                    │
+# │   - Verificar logs: docker-compose logs [servicio]                          │
+# │                                                                              │
+# │ Pérdida de datos:                                                            │
+# │   - Los volúmenes persisten datos automáticamente                           │
+# │   - Solo se pierden con: docker-compose down -v                             │
+# └──────────────────────────────────────────────────────────────────────────────┘

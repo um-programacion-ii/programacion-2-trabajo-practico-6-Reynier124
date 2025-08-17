@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductoRequest {
     private String nombre;
+    private String descripcion;
     private BigDecimal precio;
-    private Integer categoria;
+    private Integer categoriaId;
+    private String categoriaNombre;
     private Integer stock;
 }
