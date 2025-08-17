@@ -110,7 +110,7 @@ Desarrollar un sistema de microservicios utilizando Spring Boot y Feign, impleme
 
 ## 👨‍🎓 Información del Alumno
 - **Nombre y Apellido**: Reynier López
-- **Legajo**: 69182
+- **Legajo**: 62182
 
 > ⚠️ **IMPORTANTE**: Este trabajo práctico se realiza **INDIVIDUALMENTE**. Aunque se utilizan herramientas de colaboración como Pull Requests y Code Review, estas son para mantener buenas prácticas de desarrollo y un historial ordenado. Todo el desarrollo debe ser realizado por el mismo estudiante.
 
