@@ -109,8 +109,8 @@ Desarrollar un sistema de microservicios utilizando Spring Boot y Feign, impleme
 > 💡 **Nota**: Esta estimación considera la complejidad de configurar microservicios, comunicación entre servicios con Feign, múltiples bases de datos y Docker. El tiempo incluye el aprendizaje de conceptos de microservicios y Spring Cloud.
 
 ## 👨‍🎓 Información del Alumno
-- **Nombre y Apellido**: [Nombre y Apellido del Alumno]
-- **Legajo**: [Número de Legajo]
+- **Nombre y Apellido**: Reynier López
+- **Legajo**: 62182
 
 > ⚠️ **IMPORTANTE**: Este trabajo práctico se realiza **INDIVIDUALMENTE**. Aunque se utilizan herramientas de colaboración como Pull Requests y Code Review, estas son para mantener buenas prácticas de desarrollo y un historial ordenado. Todo el desarrollo debe ser realizado por el mismo estudiante.
 
@@ -142,6 +142,12 @@ Desarrollar un sistema de microservicios utilizando Spring Boot y Feign, impleme
 - JUnit 5.10.1
 - Mockito 5.8.0
 - Git y GitHub
+
+## Instrucciones de uso
+- Git clone git@github.com:um-programacion-ii/programacion-2-trabajo-practico-6-Reynier124.git
+- cd programacion-2-trabajo-practico-6-Reynier124
+- (Abrir con su editor de texto de preferencia)
+- Arrancar el programa
 
 ## 📊 Casos de Uso del Sistema
 
